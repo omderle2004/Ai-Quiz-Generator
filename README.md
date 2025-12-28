@@ -47,21 +47,33 @@ Groq API (LLaMA 3.1 Model)
 📂 Project Structure
 ai-quiz/
 │
+
 ├── server.js
+
 ├── package.json
+
 ├── .env
+
 │
 ├── routes/
+
 │   └── quizRoutes.js
 │
+
 ├── utils/
+
 │   └── groq.js
 │
+
 ├── models/
+
 │   └── QuizResult.js
 │
+
 ├── student.html
+
 ├── quiz.html
+
 └── result.html
 
 
