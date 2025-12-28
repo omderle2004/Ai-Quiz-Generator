@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .card {
+      background: white;
+      color: black;
+      padding: 30px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #5a67d8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h2>Quiz Generator</h2>
+
+    <input id="name" placeholder="Student Name" required>
+    <input id="email" type="email" placeholder="Email" required>
+    <input id="mobile" placeholder="Mobile Number" required>
+
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+<script>
+function startQuiz() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const mobile = document.getElementById("mobile").value;
+
+  if (!name || !email || !mobile) {
+    alert("Please fill all details");
+    return;
+  }
+
+  // store data for next page
+  localStorage.setItem("studentName", name);
+  localStorage.setItem("studentEmail", email);
+  localStorage.setItem("studentMobile", mobile);
+
+  // go to quiz page
+  window.location.href = "quiz.html";
+}
+</script>
+</body>
+</html>

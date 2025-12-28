@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz Result</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    h2 { color: #4CAF50; }
+    .score { font-size: 22px; margin: 15px 0; }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h2>Quiz Report</h2>
+
+    <p><b>Name:</b> <span id="name"></span></p>
+    <p><b>Email:</b> <span id="email"></span></p>
+    <p><b>Mobile:</b> <span id="mobile"></span></p>
+
+    <hr>
+
+    <p><b>Topic:</b> <span id="topic"></span></p>
+    <p><b>Level:</b> <span id="level"></span></p>
+
+    <div class="score">
+      Score: <span id="score"></span> / <span id="total"></span>
+    </div>
+
+    <p><b>Feedback:</b></p>
+    <p id="feedback"></p>
+
+    <button onclick="restart()">Take Another Quiz</button>
+  </div>
+
+<script>
+document.getElementById("name").innerText =
+  localStorage.getItem("studentName");
+document.getElementById("email").innerText =
+  localStorage.getItem("studentEmail");
+document.getElementById("mobile").innerText =
+  localStorage.getItem("studentMobile");
+
+document.getElementById("topic").innerText =
+  localStorage.getItem("quizTopic");
+document.getElementById("level").innerText =
+  localStorage.getItem("quizLevel");
+
+document.getElementById("score").innerText =
+  localStorage.getItem("score");
+document.getElementById("total").innerText =
+  localStorage.getItem("total");
+document.getElementById("feedback").innerText =
+  localStorage.getItem("feedback");
+
+function restart() {
+  window.location.href = "student.html";
+}
+</script>
+</body>
+</html>

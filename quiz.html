@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz App</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    .question { margin-bottom: 20px; }
+    #timer { color: red; font-size: 18px; font-weight: bold; }
+    button { margin-right: 10px; padding: 8px 12px; }
+  </style>
+</head>
+
+<body>
+
+  <h2>Welcome, <span id="studentName"></span> 👋</h2>
+  <h3 id="timer">Time Left: 10:00</h3>
+
+  Topic:
+  <input id="topic" value="Node.js"><br><br>
+
+  Level:
+  <select id="level">
+    <option>beginner</option>
+    <option>intermediate</option>
+    <option>advanced</option>
+  </select><br><br>
+
+  <button onclick="generateQuiz()">Generate Quiz</button>
+  <button onclick="submitQuiz()">Submit Quiz</button>
+
+  <hr>
+
+  <div id="quiz"></div>
+
+<script>
+/* ================== INITIAL SETUP ================== */
+
+document.getElementById("studentName").innerText =
+  localStorage.getItem("studentName");
+
+let quizData = [];
+let answers = {};
+let timeLeft = 600; // 10 minutes = 600 seconds
+let timerInterval;
+
+/* ================== TIMER FUNCTION ================== */
+
+function startTimer() {
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+
+    document.getElementById("timer").innerText =
+      `Time Left: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      alert("Time is up! Quiz will be submitted automatically.");
+      submitQuiz();
+    }
+
+    timeLeft--;
+  }, 1000);
+}
+
+/* ================== GENERATE QUIZ ================== */
+
+async function generateQuiz() {
+  const topic = document.getElementById("topic").value;
+  const level = document.getElementById("level").value;
+
+  localStorage.setItem("quizTopic", topic);
+  localStorage.setItem("quizLevel", level);
+
+  // reset timer
+  timeLeft = 600;
+  startTimer();
+
+  const res = await fetch("http://localhost:5000/quiz/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ topic, level })
+  });
+
+  const data = await res.json();
+  quizData = data.quiz;
+  answers = {};
+
+  const quizDiv = document.getElementById("quiz");
+  quizDiv.innerHTML = "";
+
+  quizData.forEach(q => {
+    quizDiv.innerHTML += `
+      <div class="question">
+        <b>${q.id}. ${q.question}</b><br>
+        ${Object.keys(q.options).map(opt => `
+          <label>
+            <input type="radio" name="q${q.id}" value="${opt}"
+              onchange="answers[${q.id}]='${opt}'">
+            ${opt}. ${q.options[opt]}
+          </label><br>
+        `).join("")}
+      </div>
+    `;
+  });
+}
+
+/* ================== SUBMIT QUIZ ================== */
+
+function submitQuiz() {
+  clearInterval(timerInterval);
+
+  let score = 0;
+
+  quizData.forEach(q => {
+    if (answers[q.id] === q.correct) score++;
+  });
+
+  const total = quizData.length;
+
+  let feedback =
+    score >= total * 0.8 ? "Excellent Performance 🎉" :
+    score >= total * 0.5 ? "Good Performance 👍" :
+    "Needs Improvement 📘";
+
+  // store result for result page
+  localStorage.setItem("score", score);
+  localStorage.setItem("total", total);
+  localStorage.setItem("feedback", feedback);
+
+  // redirect to result page
+  window.location.href = "result.html";
+}
+</script>
+
+</body>
+</html>
